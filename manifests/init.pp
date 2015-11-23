@@ -139,7 +139,9 @@ define network_if_base (
 
   include '::network'
 
-  if is_mac_address($name){
+  if (type($name) == "integer") {
+    $interface = get_seq_interface($name)
+  } elsif is_mac_address($name) {
     $interface = map_macaddr_to_interface($name)
     if !$interface {
       fail('Could not find the interface name for the given macaddress...')
@@ -147,6 +149,7 @@ define network_if_base (
   } else {
     $interface = $name
   }
+
 
 # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
