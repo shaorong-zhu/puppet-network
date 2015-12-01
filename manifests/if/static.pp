@@ -77,7 +77,7 @@ define network::if::static (
     if ! is_ip_address($ipv6address) { fail("${ipv6address} is not an IPv6 address.") }
   }
 
-  if ! is_mac_address($macaddress) {
+  if (! is_mac_address($macaddress)) and (type($name) != "integer") {
     # Strip off any tailing VLAN (ie eth5.90 -> eth5).
     $title_clean = regsubst($title,'^(\w+)\.\d+$','\1')
     $macaddy = getvar("::macaddress_${title_clean}")
