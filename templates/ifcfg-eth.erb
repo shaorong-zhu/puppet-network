@@ -18,6 +18,8 @@ DEVICE=<%= @interface %>
 <% end -%>
 <% if @gateway and @gateway != '' %>GATEWAY=<%= @gateway %>
 <% end -%>
+<% if @defroute %>DEFROUTE=<%= @defroute %>
+<% end -%>
 <% if @mtu %>MTU=<%= @mtu %>
 <% end -%>
 <% if @bonding_opts %>BONDING_OPTS="<%= @bonding_opts %>"

@@ -67,7 +67,8 @@ define network::if::static (
   $dns2 = undef,
   $domain = undef,
   $linkdelay = undef,
-  $scope = undef
+  $scope = undef,
+  $defroute = undef,
 ) {
   # Validate our data
   if $ipaddress {
@@ -114,6 +115,7 @@ define network::if::static (
       domain       => $domain,
       linkdelay    => $linkdelay,
       scope        => $scope,
+      defroute     => $defroute,
     }
   }
 } # define network::if::static
