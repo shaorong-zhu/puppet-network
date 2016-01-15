@@ -3,10 +3,10 @@
 define network::bond::vlan (
   $ensure,
   $bootproto = 'none',
-  $ipaddress,
-  $netmask,
+  $ipaddress = undef,
+  $netmask = undef,
   $vlanId,
-  $gateway,
+  $gateway = undef,
   $macaddress = '',
   $mtu = undef,
   $ethtool_opts = undef,
@@ -25,7 +25,7 @@ define network::bond::vlan (
   validate_re($ensure, $states, '$ensure must be either "up" or "down".')
 
   if ! $vlanId { fail("vlanId must be passed for this resource type!") }
-  if ! is_ip_address($ipaddress) { fail("${ipaddress} is not an IP address.") }
+  if $ipaddress and ! is_ip_address($ipaddress) { fail("${ipaddress} is not an IP address.") }
   if $ipv6address {
     if ! is_ip_address($ipv6address) { fail("${ipv6address} is not an IPv6 address.") }
   }
