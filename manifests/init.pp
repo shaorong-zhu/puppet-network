@@ -23,11 +23,11 @@
 # Copyright (C) 2011 Mike Arnold, unless otherwise noted.
 #
 class network {
-# Only run on RedHat derived systems.
+  # Only run on RedHat derived systems.
   case $::osfamily {
     'RedHat': { }
     default: {
-    fail('This network module only supports RedHat-based systems.')
+      fail('This network module only supports RedHat-based systems.')
     }
   }
 
@@ -36,6 +36,11 @@ class network {
     enable     => true,
     hasrestart => true,
     hasstatus  => true
+  }
+
+  service { 'NetworkManager':
+    ensure     => 'stopped',
+    enable     => false
   }
 
 } # class network
@@ -74,6 +79,7 @@ class network {
 # === Actions:
 #
 # Performs 'service network restart' after any changes to the ifcfg file.
+# Turns off the NetworkManager since the network config will be managed through puppet only.
 #
 # === TODO:
 #
@@ -124,9 +130,9 @@ define network_if_base (
   $scope           = undef,
   $linkdelay       = undef,
   $check_link_down = false,
-  $defroute        = undef,
+  $defroute        = undef
 ) {
-# Validate our booleans
+  # Validate our booleans
   validate_bool($userctl)
   validate_bool($isalias)
   validate_bool($peerdns)
@@ -134,7 +140,8 @@ define network_if_base (
   validate_bool($ipv6autoconf)
   validate_bool($ipv6peerdns)
   validate_bool($check_link_down)
-# Validate our regular expressions
+
+  # Validate our regular expressions
   $states = [ '^up$', '^down$' ]
   validate_re($ensure, $states, '$ensure must be either "up" or "down".')
 
@@ -152,7 +159,7 @@ define network_if_base (
   }
 
 
-# Deal with the case where $dns2 is non-empty and $dns1 is empty.
+  # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
     if !$dns1 {
       $dns1_real = $dns2
@@ -181,6 +188,9 @@ define network_if_base (
     }
     $iftemplate = template('network/ifcfg-eth.erb')
   }
+
+  # disable NetworkManager
+
 
   if $vlanId {
     file { "ifcfg-${interface}.${vlanId}":
