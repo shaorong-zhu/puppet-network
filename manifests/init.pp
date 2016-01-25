@@ -38,6 +38,7 @@ class network {
     hasstatus  => true
   }
 
+  # Disable NetworkManager - otherwise it may cause issues with default gateway and other routing rules
   service { 'NetworkManager':
     ensure     => 'stopped',
     enable     => false
@@ -147,6 +148,8 @@ define network_if_base (
 
   include '::network'
 
+  # ASM: For baremetal server, the name is the mac address of the port or partition.
+  #      For VM deployment, the name is always the sequence of the network interface.
   if (type($name) == "integer") {
     $interface = get_seq_interface($name)
   } elsif is_mac_address($name) {
@@ -157,7 +160,6 @@ define network_if_base (
   } else {
     $interface = $name
   }
-
 
   # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
@@ -188,9 +190,6 @@ define network_if_base (
     }
     $iftemplate = template('network/ifcfg-eth.erb')
   }
-
-  # disable NetworkManager
-
 
   if $vlanId {
     file { "ifcfg-${interface}.${vlanId}":
