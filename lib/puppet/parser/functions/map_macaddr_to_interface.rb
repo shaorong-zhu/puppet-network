@@ -3,6 +3,6 @@ module Puppet::Parser::Functions
     macaddr = args[0]
     interfaces = lookupvar("interfaces")
 
-    interfaces.split(",").find { |ifn| lookupvar("macaddress_#{ifn}") =~ /^#{macaddr}$/ }
+    interfaces.split(",").find { |ifn| lookupvar("macaddress_#{ifn}") =~ /^(?i)#{macaddr}$/ }
   end
 end
