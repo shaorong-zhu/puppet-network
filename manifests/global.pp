@@ -91,7 +91,7 @@ class network::global (
 
   # Set the gateway device if its mac address is given instead
   if is_mac_address($gatewaydev_macaddress){
-    $gatewaydev_from_mac = map_macaddr_to_interface(gatewaydev_macaddress)
+    $gatewaydev_from_mac = map_macaddr_to_interface($gatewaydev_macaddress)
     if !$gatewaydev_from_mac {
       fail('Could not find the gateway device name for the given macaddress...')
     }
