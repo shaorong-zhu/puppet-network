@@ -1,8 +1,8 @@
 define network::if::vlan (
   $ensure,
-  $vlanId,
-  $ipaddress,
-  $netmask,
+  $vlanId          = undef,
+  $ipaddress       = undef,
+  $netmask         = undef,
   $macaddress      = undef,
   $gateway         = undef,
   $bootproto       = 'none',
