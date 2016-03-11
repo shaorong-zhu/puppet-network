@@ -67,6 +67,7 @@ class network::global (
   $ipv6defaultdev        = undef,
   $nisdomain             = undef,
   $vlan                  = undef,
+  $vlanId                = undef,
   $ipv6networking        = false,
   $nozeroconf            = undef
 ) {
@@ -92,6 +93,11 @@ class network::global (
   # Set the gateway device if its mac address is given instead
   if is_mac_address($gatewaydev_macaddress){
     $gatewaydev_from_mac = map_macaddr_to_interface($gatewaydev_macaddress)
+    if $vlanId {
+      $gatewaydev_from_mac_final = "${gatewaydev_from_mac}.${$vlanId}"
+    } else {
+      $gatewaydev_from_mac_final = $gatewaydev_from_mac
+    }
     if !$gatewaydev_from_mac {
       fail('Could not find the gateway device name for the given macaddress...')
     }
