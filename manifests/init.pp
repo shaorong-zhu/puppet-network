@@ -31,18 +31,27 @@ class network {
     }
   }
 
-  service { 'network':
-    ensure     => 'running',
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true
-  }
-
   # Disable NetworkManager - otherwise it may cause issues with default gateway and other routing rules
   service { 'NetworkManager':
     ensure     => 'stopped',
     enable     => false
   }
+
+  clean_ifcfg { 'clean_if_configs':
+    before => Service['network'],
+  }
+
+  # We use a custom service provider defined in this module for rhel/centos7 to eliminate an issue with "orphaned" dhclients
+    service { 'network':
+      ensure     => 'running',
+      enable     => true,
+      hasrestart => true,
+      hasstatus  => true,
+      provider   => $::operatingsystemmajrelease ? {
+        "7"     => "systemd_network",
+        default => undef
+      }
+    }
 
 } # class network
 
