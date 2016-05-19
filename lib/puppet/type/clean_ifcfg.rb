@@ -30,6 +30,6 @@ Puppet::Type.newtype(:clean_ifcfg) do
   # Make a file resource to remove a given file.
   def mk_file_resource(path)
     # Force deletion, so directories actually get deleted.
-    Puppet::Type.type(:file).new :path => path, :ensure => :absent, :force => true
+    Puppet::Type.type(:file).new :path => path, :ensure => :absent, :force => true, :before => self[:before]
   end
 end
