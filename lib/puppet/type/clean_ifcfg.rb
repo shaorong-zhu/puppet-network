@@ -15,7 +15,7 @@ Puppet::Type.newtype(:clean_ifcfg) do
     end
   end
 
-  def generate
+  def eval_generate
     ifcfg_files = Dir["/etc/sysconfig/network-scripts/ifcfg-*"]
     # ignore ifcfg-lo, as well as any ifcfg file for an interface we have said to ignore
     ifcfg_files.reject! do |file|
