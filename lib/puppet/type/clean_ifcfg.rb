@@ -21,9 +21,9 @@ Puppet::Type.newtype(:clean_ifcfg) do
     ifcfg_files.reject! do |file|
       file.end_with?("-lo") || self[:ignore].find{ |name| file.end_with?("-%s" % name)}
     end
-    return if ifcfg_files.empty?
+    return [] if ifcfg_files.empty?
     notice "Cleaning ifcfg files: %s" % ifcfg_files.to_s
-    ifcfg_files.collect {|path| mk_file_resource(path)}
+    ifcfg_files.collect { |path| mk_file_resource(path) }
   end
 
   # Reused from Puppet's tidy resource code
